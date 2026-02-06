@@ -3,45 +3,7 @@ import type { Request, Response } from "express";
 
 const app = express();
 const port = 3000;
-
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
-});
-
-app.get("/test", (req: Request, res: Response) => {
-  let returnObj = {
-    name: "test",
-    age: 20,
-    address: "Thai",
-  };
-  res.send(returnObj);
-});
-
-app.get("/test", (req: Request, res: Response) => {
-  const id = req.query.id;
-  const output = `id: ${id}`;
-  res.send(output);
-});
-
-app.listen(port, () => {
-  console.log(`App listening at http://localhost:${port}`);
-});
-
-app.get("/events", (req, res) => {
-  const category = req.query.category;
-  const filterdEvents = events.filter((event) => event.category === category);
-  res.send(filterdEvents);
-});
-
-app.get("/events/:id", (req, res) => {
-  const id = parseInt(req.params.id);
-  const event = events.find((event) => event.id === id);
-  if (event) {
-    res.json(event);
-  } else {
-    res.status(404).send({ message: "Event not found" });
-  }
-});
+app.use(express.json());
 
 interface Event {
   id: number;
@@ -123,3 +85,49 @@ const events: Event[] = [
     organizer: "Bristol Food Network",
   },
 ];
+
+app.get("/", (req: Request, res: Response) => {
+  res.send("Hello World!");
+});
+
+app.get("/test", (req: Request, res: Response) => {
+  let returnObj = {
+    name: "test",
+    age: 20,
+    address: "Thai",
+  };
+  res.send(returnObj);
+});
+
+app.get("/test", (req: Request, res: Response) => {
+  const id = req.query.id;
+  const output = `id: ${id}`;
+  res.send(output);
+});
+
+app.listen(port, () => {
+  console.log(`App listening at http://localhost:${port}`);
+});
+
+app.get("/events", (req, res) => {
+  const category = req.query.category;
+  const filterdEvents = events.filter((event) => event.category === category);
+  res.send(filterdEvents);
+});
+
+app.get("/events/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const event = events.find((event) => event.id === id);
+  if (event) {
+    res.json(event);
+  } else {
+    res.status(404).send({ message: "Event not found" });
+  }
+});
+
+app.post("/events", (req, res) => {
+  const newEvent: Event = req.body;
+  newEvent.id = events.length + 1;
+  events.push(newEvent);
+  res.json(newEvent);
+});
