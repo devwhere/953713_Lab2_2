@@ -33,6 +33,16 @@ app.get("/events", (req, res) => {
   res.send(filterdEvents);
 });
 
+app.get("/events/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  const event = events.find((event) => event.id === id);
+  if (event) {
+    res.json(event);
+  } else {
+    res.status(404).send({ message: "Event not found" });
+  }
+});
+
 interface Event {
   id: number;
   category: string;
