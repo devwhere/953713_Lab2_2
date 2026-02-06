@@ -28,7 +28,9 @@ app.listen(port, () => {
 });
 
 app.get("/events", (req, res) => {
-  res.json(events);
+  const category = req.query.category;
+  const filterdEvents = events.filter((event) => event.category === category);
+  res.send(filterdEvents);
 });
 
 interface Event {
